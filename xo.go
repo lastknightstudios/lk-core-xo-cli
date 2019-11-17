@@ -12,6 +12,17 @@ func main() {
 
 	//Create GitHub Project
 
+	print("XO CLI TOOL")
+	print("-----------")
+
+	argsWithProg := os.Args
+	argsWithoutProg := os.Args[1:]
+
+	arg := os.Args[3]
+	fmt.Println(argsWithProg)
+	fmt.Println(argsWithoutProg)
+	fmt.Println(arg)
+
 	// Set expected Vars
 
 	var xoGitHubOrg string
