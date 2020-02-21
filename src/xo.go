@@ -5,8 +5,6 @@ import (
 	"os"
 )
 
-var vcsPlugin = "github"
-
 func main() {
 
 	// Parse Arguments
@@ -23,10 +21,11 @@ func main() {
 			help(args)
 		//case "config":
 		//	config(args)
-		//case "create":
-		//	create(args)
+		case "create":
+			create(args)
 		default:
 			fmt.Println("Invalid command")
+			fmt.Println("try xo help")
 		}
 	}
 }

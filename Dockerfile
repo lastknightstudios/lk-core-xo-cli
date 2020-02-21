@@ -11,12 +11,11 @@ RUN adduser \
     --no-create-home \
     --uid "${UID}" \
     "${USER}"
-WORKDIR /bin
-COPY ./bin .
 
 FROM scratch
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group
-COPY --from=builder ./bin .
+WORKDIR /bin
+COPY ./bin .
 USER xouser:xouser
 ENTRYPOINT [ "./xo" ]

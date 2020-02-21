@@ -1,12 +1,14 @@
 # Makefile
 
+APPNAME=xo
+DOCKERREPO=lastknightstudios
 GOPATH=$(PWD)/vendor:$(PWD)/src
 GOBIN=$(PWD)/bin
 GOFILES=$(wildcard src/*.go)
-GONAME=xo
+GONAME=$(APPNAME)
 PID=/tmp/go-$(GONAME).pid
 .DEFAULT_GOAL := help
-.PHONY: help test build publish-release publish-docker clean
+.PHONY: help test build publish-release publish-dockerrepo clean
 
 help:
 	@printf "\nUSAGE: make [command] e.g. make app \n\n"
@@ -23,16 +25,21 @@ build: test ## Builds the Go Binaries
 	@echo "[BUILD] Building application to ./bin"
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go build -o bin/$(GONAME) $(GOFILES)
 	@echo "[BUILD] Building Docker Image"
-	@docker build . -t $(GONAME)
+	@docker build --no-cache --pull . -t $(DOCKERREPO)/$(APPNAME):latest
 
 publish-release: ## Publish to GitHub Releases
 	@echo "[PUBLISH] Publishing to GitHub Releases"
 
-publish-docker: ## Publish to DockerHub
-	@echo "[PUBLISH] Publishing to DockerHub"
+publish-dockerrepo: ## Publish to dockerrepo
+	@echo "[PUBLISH] Publishing to dockerrepo"
+	@docker login docker.io -u $(DOCKERREPO)
+	@docker push $(DOCKERREPO)/$(APPNAME):latest
+	@docker logout
 
-clean:  ## Publish to DockerHub
+clean:  ## Publish to dockerrepo
 	@echo "[CLEAN] Cleaning Up"
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go clean
 
-app: lint build publish-release publish-docker  ## Lints, Builds and publishes the application
+app: lint build clean ## Lint, Test and Build
+
+publish-all: publish-release publish-dockerrepo ## Publishes the application to container repo and github releases
