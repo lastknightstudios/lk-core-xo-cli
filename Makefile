@@ -6,7 +6,6 @@ GOFILES=$(wildcard src/*.go)
 GONAME=xo
 PID=/tmp/go-$(GONAME).pid
 .DEFAULT_GOAL := help
-
 .PHONY: help test build publish-release publish-docker clean
 
 help:
@@ -23,6 +22,8 @@ test: ## Runs go test
 build: test ## Builds the Go Binaries
 	@echo "[BUILD] Building application to ./bin"
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go build -o bin/$(GONAME) $(GOFILES)
+	@echo "[BUILD] Building Docker Image"
+	@docker build . -t $(GONAME)
 
 publish-release: ## Publish to GitHub Releases
 	@echo "[PUBLISH] Publishing to GitHub Releases"
@@ -33,6 +34,5 @@ publish-docker: ## Publish to DockerHub
 clean:  ## Publish to DockerHub
 	@echo "[CLEAN] Cleaning Up"
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go clean
-
 
 app: lint build publish-release publish-docker  ## Lints, Builds and publishes the application
