@@ -5,15 +5,15 @@ import "fmt"
 // Plugin interfaces
 
 type repository interface {
-	name() string
 	url() string
 	token() string
+	createRepository() bool
 }
 
 type pipeline interface {
-	name() string
 	url() string
 	token() string
+	createPipeline() bool
 }
 
 func create(args []string) {
@@ -22,12 +22,4 @@ func create(args []string) {
 	//github(args[2])
 	fmt.Println("Creating Pipeline: " + args[2])
 	//buildkite(args[2])
-}
-
-func createRepository(repository repository) {
-	fmt.Println(repository)
-}
-
-func createPipeline(pipeline pipeline) {
-	fmt.Println(pipeline)
 }

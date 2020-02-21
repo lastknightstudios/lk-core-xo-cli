@@ -1,14 +1,18 @@
 # Makefile
 
 APPNAME=xo
+SHELL=/bin/bash
 DOCKERREPO=lastknightstudios
+REPO=github
+PIPELINE=buildkite
 GOPATH=$(PWD)/vendor:$(PWD)/src
 GOBIN=$(PWD)/bin
 GOFILES=$(wildcard src/*.go)
+GOPLUGINS="$(wildcard src/plugins/bitbucket/*.go)
 GONAME=$(APPNAME)
 PID=/tmp/go-$(GONAME).pid
 .DEFAULT_GOAL := help
-.PHONY: help test build publish-release publish-dockerrepo clean
+.PHONY: help test build-app build-docker publish-release publish-dockerrepo clean
 
 help:
 	@printf "\nUSAGE: make [command] e.g. make app \n\n"
@@ -21,11 +25,20 @@ lint: ## Lints the repository source code
 test: ## Runs go test
 	@echo "[TEST] Running Tests"
 
-build: test ## Builds the Go Binaries
+build-all: build-app build docker ## Build both the Go App and the Docker Image
+
+build-app: test ## Builds the Go App
+	@echo "[BUILD] Building plugins to ./bin"
+	@go build -buildmode=plugin -o bin/buildkite.so src/plugins/bitbucket/plugin.go
+	@go build -buildmode=plugin -o bin/github.so src/plugins/github/plugin.go
 	@echo "[BUILD] Building application to ./bin"
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go build -o bin/$(GONAME) $(GOFILES)
+
+build-docker: ## Builds the Docker Image
 	@echo "[BUILD] Building Docker Image"
 	@docker build --no-cache --pull . -t $(DOCKERREPO)/$(APPNAME):latest
+
+publish-all: publish-release publish-dockerrepo ## Publishes the application to container repo and github releases
 
 publish-release: ## Publish to GitHub Releases
 	@echo "[PUBLISH] Publishing to GitHub Releases"
@@ -36,10 +49,8 @@ publish-dockerrepo: ## Publish to dockerrepo
 	@docker push $(DOCKERREPO)/$(APPNAME):latest
 	@docker logout
 
-clean:  ## Publish to dockerrepo
+clean:  ## Runs go clean
 	@echo "[CLEAN] Cleaning Up"
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go clean
 
-app: lint build clean ## Lint, Test and Build
-
-publish-all: publish-release publish-dockerrepo ## Publishes the application to container repo and github releases
+all: lint build-all publish all clean ## Lint, Test and Build and Publish

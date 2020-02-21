@@ -14,6 +14,7 @@ func main() {
 		help(args)
 	} else {
 		command := os.Args[1]
+		load(args)
 		switch command {
 		case "version":
 			version(args)
