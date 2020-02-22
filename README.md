@@ -61,7 +61,7 @@ You can either build binaries or create a docker container. Building the tool wi
 
 #### Make
 
-The make is self documenting. Just run make the target goal is help.
+The make is self documenting. Just run make the default goal is help.
 
 ```bash
 $ make
@@ -69,7 +69,7 @@ $ make
 USAGE: make [command] e.g. make app
 
 all                  Lint, Test and Build and Publish
-app                  Builds the Go App
+app                  Builds the xo go app
 build-all            Build both the Go App and the Docker Image
 clean                Runs go clean
 docker               Builds the Docker Image
@@ -78,7 +78,6 @@ publish-all          Publishes the application to container repo and github rele
 publish-dockerrepo   Publish to dockerrepo
 publish-release      Publish to GitHub Releases
 test                 Runs go test
-xo                   Runs just go build
 ```
 
 #### Binary Builder
