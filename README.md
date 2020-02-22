@@ -114,7 +114,7 @@ make docker
 
 As the tool is provided by means of binaries or docker image the method of use is described below
 
-#### Binary Create
+#### Binary Usage
 
 Ensure you are in the folder you want the new project to clone into.
 e.g. cd ~/scm/project_name
@@ -143,7 +143,7 @@ To create just a pipeline
 xo create my_project --pipeline buildkite
 ```
 
-#### Docker Create
+#### Docker Usage
 
 ```bash
 docker run lastknight/xo create my_project --repo github --pipeline buildkite
