@@ -12,7 +12,7 @@ GOPLUGINS="$(wildcard src/plugins/*.go)
 GONAME=$(APPNAME)
 PID=/tmp/go-$(GONAME).pid
 .DEFAULT_GOAL := help
-.PHONY: help test build-app build-docker publish-release publish-dockerrepo clean
+.PHONY: help test app docker publish-release publish-dockerrepo clean
 
 help:
 	@printf "\nUSAGE: make [command] e.g. make app \n\n"
@@ -25,16 +25,16 @@ lint: ## Lints the repository source code
 test: ## Runs go test
 	@echo "[TEST] Running Tests"
 
-build-all: build-app build docker ## Build both the Go App and the Docker Image
+build-all: app build docker ## Build both the Go App and the Docker Image
 
-build-app: test ## Builds the Go App
+app: test ## Builds the Go App
 	@echo "[BUILD] Building plugins to ./bin"
 	@#@go build -buildmode=plugin -o bin/bitbucket.so src/plugins/bitbucket.go
 	@go build -buildmode=plugin -o bin/github.so src/plugins/github.go
 	@echo "[BUILD] Building application to ./bin"
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go build -o bin/$(GONAME) $(GOFILES)
 
-build-docker: ## Builds the Docker Image
+docker: ## Builds the Docker Image
 	@echo "[BUILD] Building Docker Image"
 	@docker build --no-cache --pull . -t $(DOCKERREPO)/$(APPNAME):latest
 
@@ -52,5 +52,7 @@ publish-dockerrepo: ## Publish to dockerrepo
 clean:  ## Runs go clean
 	@echo "[CLEAN] Cleaning Up"
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go clean
+
+xo: app ## Runs just go build
 
 all: lint build-all publish all clean ## Lint, Test and Build and Publish
