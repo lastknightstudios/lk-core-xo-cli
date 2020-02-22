@@ -9,7 +9,7 @@ import (
 // Repository Interface
 type Repository interface {
 	CreateRepository(name string)
-	CreateWebhook()
+	CreateWebhook(webhook string)
 }
 
 // Pipeline Interface

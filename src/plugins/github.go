@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -10,13 +11,17 @@ import (
 
 type repository string
 
+var repoOrg = os.Getenv("XO_REPO_ORG")
+var repoToken = os.Getenv("XO_REPO_TOKEN")
+
+const uri string = "https://api.github.com"
+
 func (g repository) CreateRepository(name string) {
-	fmt.Println("Creating Repository", name)
 	_CreateRepository(name)
 }
 
-func (g repository) CreateWebhook() {
-	fmt.Println("Creating WebHook")
+func (g repository) CreateWebhook(webhook string) {
+	_CreateWebhook(webhook)
 }
 
 // Repository exported as symbol
@@ -25,20 +30,17 @@ var Repository repository
 func _CreateRepository(name string) {
 
 	// Init vars and consts
-	const uri string = "https://api.github.com"
-	var GHOrg string
-	var GHToken string
 
 	// First Check Env Variables and use these
-	GHOrg = os.Getenv("XO_GITHUB_ORG")
-	GHToken = os.Getenv("XO_GITHUB_TOKEN")
+	repoOrg = os.Getenv("XO_GITHUB_ORG")
+	repoToken = os.Getenv("XO_GITHUB_TOKEN")
 
-	var GHRepoName = name
-	var GHRepoPrivate = true
-	var GHRepoHasIssues = false
-	var GHRepoHasProjects = false
-	var GHRepoHasWiki = false
-	//var GHRepoTeamID = "lk-core-developers"
+	var RepoName = name
+	var RepoPrivate = true
+	var RepoHasIssues = false
+	var RepoHasProjects = false
+	var RepoHasWiki = false
+	//var RepoTeamID = "lk-core-developers"
 
 	type _Repository struct {
 		Name        string `json:"name"`
@@ -48,26 +50,54 @@ func _CreateRepository(name string) {
 		HasWiki     bool   `json:"has_wiki"`
 	}
 
-	data := _Repository{GHRepoName, GHRepoPrivate, GHRepoHasIssues, GHRepoHasProjects, GHRepoHasWiki}
+	data := _Repository{RepoName, RepoPrivate, RepoHasIssues, RepoHasProjects, RepoHasWiki}
 
 	payloadBytes, err := json.Marshal(data)
 	if err != nil {
-		// handle err
+		fmt.Println(err)
+		os.Exit(1)
 	}
 	body := bytes.NewReader(payloadBytes)
 
-	req, err := http.NewRequest("POST", uri+"/orgs/"+GHOrg+"/repos", body)
+	req, err := http.NewRequest("POST", uri+"/orgs/"+repoOrg+"/repos", body)
 	if err != nil {
-		// handle err
+		fmt.Println(err)
+		os.Exit(1)
 	}
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+GHToken)
+	req.Header.Set("Authorization", "Bearer "+repoToken)
 
 	resp, err := http.DefaultClient.Do(req)
+	scanner := bufio.NewScanner(resp.Body)
+
+	if resp.StatusCode != 201 {
+		scanner.Split(bufio.ScanBytes)
+		for scanner.Scan() {
+			fmt.Print(scanner.Text())
+		}
+		os.Exit(1)
+	}
 
 	if err != nil {
-		// handle err
 		fmt.Println(err)
+		os.Exit(1)
 	}
+
+	fmt.Println("Repository has been created:", name)
 	defer resp.Body.Close()
+}
+
+func _CreateWebhook(webhook string) {
+	println("Webhook URI: " + webhook)
+
+	type WebHook struct {
+		Name   string   `json:"name"`
+		Active bool     `json:"active"`
+		Events []string `json:"events"`
+		Config struct {
+			URL         string `json:"url"`
+			ContentType string `json:"content_type"`
+			InsecureSsl string `json:"insecure_ssl"`
+		} `json:"config"`
+	}
 }
