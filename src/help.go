@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func help(args []string) {
+func help() {
 	fmt.Println("\n", "USAGE: xo <command> [args] [repo] [pipeline]")
 	fmt.Println("\n", "EXAMPLE: xo create project-name github buildkite")
 	fmt.Println("\n", "available commands:")

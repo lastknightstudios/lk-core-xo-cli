@@ -8,7 +8,7 @@ PIPELINE=buildkite
 GOPATH=$(PWD)/vendor:$(PWD)/src
 GOBIN=$(PWD)/bin
 GOFILES=$(wildcard src/*.go)
-GOPLUGINS="$(wildcard src/plugins/bitbucket/*.go)
+GOPLUGINS="$(wildcard src/plugins/*.go)
 GONAME=$(APPNAME)
 PID=/tmp/go-$(GONAME).pid
 .DEFAULT_GOAL := help
@@ -29,8 +29,8 @@ build-all: build-app build docker ## Build both the Go App and the Docker Image
 
 build-app: test ## Builds the Go App
 	@echo "[BUILD] Building plugins to ./bin"
-	@go build -buildmode=plugin -o bin/buildkite.so src/plugins/bitbucket/plugin.go
-	@go build -buildmode=plugin -o bin/github.so src/plugins/github/plugin.go
+	@#@go build -buildmode=plugin -o bin/bitbucket.so src/plugins/bitbucket.go
+	@go build -buildmode=plugin -o bin/github.so src/plugins/github.go
 	@echo "[BUILD] Building application to ./bin"
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go build -o bin/$(GONAME) $(GOFILES)
 
