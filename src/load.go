@@ -14,12 +14,11 @@ type Repository interface {
 
 // Pipeline Interface
 type Pipeline interface {
-	CreateRepository()
-	CreateWebhook()
+	CreatePipeline(name string)
 }
 
-func load(repository string, pipeline string) Repository {
-	return loadRepositoryPlugin(repository, "Repository")
+func load(repository string, pipeline string) (Repository, Pipeline) {
+	return loadRepositoryPlugin(repository, "Repository"), loadPipelinePlugin(pipeline, "Pipeline")
 }
 
 func loadRepositoryPlugin(repositoryPlugin string, pluginSymbol string) Repository {
@@ -46,7 +45,7 @@ func loadRepositoryPlugin(repositoryPlugin string, pluginSymbol string) Reposito
 	repo, ok := symbol.(Repository)
 
 	if !ok {
-		fmt.Println("unexpected type from plugin symbol")
+		fmt.Println("unexpected repository type from plugin symbol")
 		os.Exit(1)
 	}
 
@@ -55,6 +54,35 @@ func loadRepositoryPlugin(repositoryPlugin string, pluginSymbol string) Reposito
 	return repo
 }
 
-func loadPipelinePlugin(plugin string) {
-	fmt.Println("Loading:", plugin, " plugin")
+func loadPipelinePlugin(pipelinePlugin string, pluginSymbol string) Pipeline {
+	fmt.Println("Loading:", pipelinePlugin, " plugin")
+
+	var mod string
+	mod = "./bin/" + pipelinePlugin + ".so"
+
+	plug, err := plugin.Open(mod)
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	symbol, err := plug.Lookup(pluginSymbol)
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	var pipe Pipeline
+	pipe, ok := symbol.(Pipeline)
+
+	if !ok {
+		fmt.Println("unexpected pipeline type from plugin symbol")
+		os.Exit(1)
+	}
+
+	fmt.Println("Plugin Loaded:", pipelinePlugin, pipe)
+
+	return pipe
 }

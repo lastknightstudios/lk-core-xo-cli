@@ -27,13 +27,15 @@ func (g repository) CreateWebhook(webhook string) {
 // Repository exported as symbol
 var Repository repository
 
+// Plugin Implementation
+
 func _CreateRepository(name string) {
 
 	// Init vars and consts
 
 	// First Check Env Variables and use these
-	repoOrg = os.Getenv("XO_GITHUB_ORG")
-	repoToken = os.Getenv("XO_GITHUB_TOKEN")
+	repoOrg = os.Getenv("XO_REPO_ORG")
+	repoToken = os.Getenv("XO_REPO_TOKEN")
 
 	var RepoName = name
 	var RepoPrivate = true

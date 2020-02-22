@@ -29,7 +29,7 @@ build-all: app build docker ## Build both the Go App and the Docker Image
 
 app: test ## Builds the Go App
 	@echo "[BUILD] Building plugins to ./bin"
-	@#@go build -buildmode=plugin -o bin/bitbucket.so src/plugins/bitbucket.go
+	@go build -buildmode=plugin -o bin/buildkite.so src/plugins/buildkite.go
 	@go build -buildmode=plugin -o bin/github.so src/plugins/github.go
 	@echo "[BUILD] Building application to ./bin"
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go build -o bin/$(GONAME) $(GOFILES)

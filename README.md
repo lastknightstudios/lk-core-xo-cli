@@ -1,9 +1,35 @@
 # lk-core-xo-cli
 
+**DISCLAIMER**: Some of this readme maybe inaccurate or incomplete.
+
+## Contents
+
+- Description & Motivation
+- Building the xo tool
+- Using the xo tool
+- Contributing & Creating Plugins
+- References
+
+---
+
+### Description & Motivation
+
+#### Description
+
 A CLI Tool plugin framework for provisioning new development projects and resources. Supporting multiple organisations and accounts. Uses Personal Acccess Tokens for api access the tool enforces coding patterns and standards.
 The tool creates repositories, pipelines and webhooks and also allows an initial template commit with pipeline and starter code.
 
-## Secrets
+#### Motivation
+
+My main motivations in developing this tool is to learn the go programming language and is to prevent clickops of common tasks by providing a simple cli tool that enforces code structure and standards by means of good generic templates.
+
+---
+
+### Building the xo tool
+
+You can either build binaries or create a docker container. Building the tool will create the go binaries and store in the ./bin folder or create a tiny docker image.
+
+#### Secrets
 
 These secrets must be exported to the environment for the xo tool to be able to read them in. How you manage your secrets is out of scope of this document. I personally read them in from AWS Secrets Manager by calling a custom shell profile function when i need them.
 
@@ -19,13 +45,7 @@ export XO_PIPELINE_ORG=lastknightstudios
 export XO_PIPELINE_TOKEN=abcds123123123123123
 ```
 
-## Installation
-
-- Tool Requirements
-- Clone this repository.
-- Build the tool.
-
-## Tool Requirements
+#### Tool Requirements
 
 This solution uses the following tools
 
@@ -33,7 +53,7 @@ This solution uses the following tools
 - docker
 - make
 
-### Clone this repository
+#### Clone this repository
 
 Clone the xo repository
 
@@ -54,10 +74,6 @@ Change into the xo directory
 ```bash  
 cd lk-core-xo-cli
 ```
-
-### Build the tool
-
-You can either build binaries or create a docker container. Building the tool will create the go binaries and store in the ./bin folder or create a tiny docker image.
 
 #### Make
 
@@ -92,12 +108,13 @@ make app
 make docker
 ```
 
-### Usage
+---
 
-- TODO: Configure the xo tool. Will add in project config file
-- Create a new project.
+### Using the xo tool
 
-### Create
+As the tool is provided by means of binaries or docker image the method of use is described below
+
+#### Binary Create
 
 Ensure you are in the folder you want the new project to clone into.
 e.g. cd ~/scm/project_name
@@ -126,7 +143,101 @@ To create just a pipeline
 xo create my_project --pipeline buildkite
 ```
 
-## Branching Strategy
+#### Docker Create
+
+```bash
+docker run lastknight/xo create my_project --repo github --pipeline buildkite
+```
+
+---
+
+### Contributing & Creating Plugins
+
+The xo tool utilises interfaces that must be implemented for them to be correctly loaded. Some variables and return types must be utilised. The implementation is up to you.
+
+#### Creating Repository Plugins
+
+Create a new plugin file in src/plugins directory copy the following code in to the plugins directory
+
+```go
+package main
+
+import (
+    // ...
+)
+
+type repository string
+
+var repoOrg = os.Getenv("XO_REPO_ORG")
+var repoToken = os.Getenv("XO_REPO_TOKEN")
+
+func (g repository) CreateRepository(name string) {
+	_CreateRepository(name)
+}
+
+func (g repository) CreateWebhook(webhook string) {
+	_CreateWebhook(webhook)
+}
+
+// Repository exported as symbol
+var Repository repository
+
+// Plugin Implementation
+
+func _CreateRepository(name string) {
+    // Your implementation
+
+}
+
+func _CreateWebhook(webhook string) {
+    // Your implementation
+}
+
+```
+
+or create a skeleton template automatically with the tool
+
+``` bash
+xo plugin bitbucket --type repository
+```
+
+#### Creating Pipeline Plugins
+
+Create a new plugin file in src/plugins directory copy the following code in to the plugins directory
+
+```go
+package main
+
+import (
+// ...
+)
+
+type pipeline string
+
+var pipelineOrg = os.Getenv("XO_PIPELINE_ORG")
+var pipelineToken = os.Getenv("XO_PIPELINE_TOKEN")
+
+func (g pipeline) CreatePipeline(name string) {
+	_CreatePipeline(name)
+}
+
+// Pipeline exported as symbol
+var Pipeline pipeline
+
+// Plugin Implementation
+
+func _CreatePipeline(name string) {
+    // Your Implementation
+}
+```
+
+or create a skeleton template automatically with the tool
+
+``` bash
+xo plugin travisci --type pipeline
+```
+
+##### Branching Strategy
 
 The master branch is protected. Feel free to create feature or bug branchs and issue a pull request.
 
