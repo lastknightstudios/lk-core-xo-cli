@@ -35,5 +35,4 @@ func main() {
 	default:
 		fmt.Println("invalid command:", "try xo help")
 	}
-
 }
