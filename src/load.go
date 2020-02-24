@@ -9,7 +9,9 @@ import (
 // Repository Interface
 type Repository interface {
 	CreateRepository(name string)
+	fmt.Println("[REPO] Repository has been Created")
 	CreateWebhook(webhook string)
+	fmt.Println("[PIPELINE] Pipeline has been Created")
 }
 
 // Pipeline Interface

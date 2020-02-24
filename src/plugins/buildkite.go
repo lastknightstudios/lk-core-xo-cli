@@ -19,8 +19,9 @@ func (g pipeline) CreatePipeline(name string) {
 
 // Pipeline exported as symbol
 var Pipeline pipeline
-var pipelineOrg = os.Getenv("XO_BUILDKITE_ORG")
-var pipelineToken = os.Getenv("XO_BUILDKITE_TOKEN")
+var pipelineOrg = os.Getenv("XO_PIPELINE_ORG")
+var pipelineToken = os.Getenv("XO_PIPELINE_TOKEN")
+var repoOrg = os.Getenv("XO_REPO_ORG")
 
 // Plugin Implementation
 
@@ -28,7 +29,6 @@ func _CreatePipeline(name string) {
 
 	// Init vars and consts
 
-	var repoOrg = os.Getenv("XO_REPO_ORG")
 	var repoName = "git@github.com:" + repoOrg + "/" + name + ".git"
 
 	type Step struct {
@@ -78,7 +78,6 @@ func _CreatePipeline(name string) {
 			os.Exit(1)
 		}
 		bodyString := string(bodyBytes)
-		println(bodyString)
 	}
 
 	defer resp.Body.Close()

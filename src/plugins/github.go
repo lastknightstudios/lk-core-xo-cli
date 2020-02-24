@@ -11,6 +11,7 @@ import (
 
 type repository string
 
+//FI: Move these to the xo main package and pass them in instead.
 var repoOrg = os.Getenv("XO_REPO_ORG")
 var repoToken = os.Getenv("XO_REPO_TOKEN")
 
@@ -85,7 +86,6 @@ func _CreateRepository(name string) {
 		os.Exit(1)
 	}
 
-	fmt.Println("Repository has been created:", name)
 	defer resp.Body.Close()
 }
 
