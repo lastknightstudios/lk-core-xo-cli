@@ -9,9 +9,7 @@ import (
 // Repository Interface
 type Repository interface {
 	CreateRepository(name string)
-	fmt.Println("[REPO] Repository has been Created")
 	CreateWebhook(webhook string)
-	fmt.Println("[PIPELINE] Pipeline has been Created")
 }
 
 // Pipeline Interface
@@ -24,7 +22,7 @@ func load(repository string, pipeline string) (Repository, Pipeline) {
 }
 
 func loadRepositoryPlugin(repositoryPlugin string, pluginSymbol string) Repository {
-	fmt.Println("Loading:", repositoryPlugin, " plugin")
+	fmt.Println("[PLUGINS] Loading:", repositoryPlugin, " plugin")
 
 	var mod string
 	mod = "./bin/" + repositoryPlugin + ".so"
@@ -47,17 +45,17 @@ func loadRepositoryPlugin(repositoryPlugin string, pluginSymbol string) Reposito
 	repo, ok := symbol.(Repository)
 
 	if !ok {
-		fmt.Println("unexpected repository type from plugin symbol")
+		fmt.Println("[ERROR] Unexpected repository type from plugin symbol")
 		os.Exit(1)
 	}
 
-	fmt.Println("Plugin Loaded:", repositoryPlugin, repo)
+	fmt.Println("[PLUGINS] Plugin Loaded:", repositoryPlugin, repo)
 
 	return repo
 }
 
 func loadPipelinePlugin(pipelinePlugin string, pluginSymbol string) Pipeline {
-	fmt.Println("Loading:", pipelinePlugin, " plugin")
+	fmt.Println("[PLUGINS] Loading:", pipelinePlugin, " plugin")
 
 	var mod string
 	mod = "./bin/" + pipelinePlugin + ".so"
@@ -80,11 +78,11 @@ func loadPipelinePlugin(pipelinePlugin string, pluginSymbol string) Pipeline {
 	pipe, ok := symbol.(Pipeline)
 
 	if !ok {
-		fmt.Println("unexpected pipeline type from plugin symbol")
+		fmt.Println("[ERROR] Unexpected pipeline type from plugin symbol")
 		os.Exit(1)
 	}
 
-	fmt.Println("Plugin Loaded:", pipelinePlugin, pipe)
+	fmt.Println("[PLUGINS] Plugin Loaded:", pipelinePlugin, pipe)
 
 	return pipe
 }

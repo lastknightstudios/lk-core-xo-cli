@@ -1,10 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 )
@@ -52,9 +52,10 @@ func _CreatePipeline(name string) {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+
 	body := bytes.NewReader(payloadBytes)
 	apiTarget := uri + "/v2/organizations/" + pipelineOrg + "/pipelines"
-	println("api:" + apiTarget)
+
 	req, err := http.NewRequest("POST", apiTarget, body)
 	if err != nil {
 		fmt.Println(err)
@@ -65,19 +66,19 @@ func _CreatePipeline(name string) {
 	req.Header.Set("Authorization", "Bearer "+pipelineToken)
 
 	resp, err := http.DefaultClient.Do(req)
+	scanner := bufio.NewScanner(resp.Body)
+
+	if resp.StatusCode != 201 {
+		scanner.Split(bufio.ScanBytes)
+		for scanner.Scan() {
+			fmt.Print(scanner.Text())
+		}
+		os.Exit(1)
+	}
 
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		bodyBytes, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		bodyString := string(bodyBytes)
 	}
 
 	defer resp.Body.Close()
