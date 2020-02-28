@@ -25,7 +25,7 @@ lint: ## Not Yet Implemented: Lints the repository source code
 test: ## Not Yet Implemented: Runs go test
 	@echo "[TEST] Running Tests"
 
-build-all: app build docker ## Build both the Go App and the Docker Image
+build-all: app docker ## Build both the Go App and the Docker Image
 
 app: test ## Builds the Go App
 	@echo "[BUILD] Building plugins to ./bin"
@@ -38,6 +38,11 @@ docker: ## Builds the Docker Image
 	@echo "[BUILD] Building Docker Image"
 	@docker build --no-cache --pull . -t $(DOCKERREPO)/$(APPNAME):latest
 
+install: ## Installs the App to /usr/local/bin
+	cp -rf ./bin/xo /usr/local/bin/
+	cp -rf ./bin/github.so /usr/local/bin/
+	cp -rf ./bin/buildkite.so /usr/local/bin/
+	
 publish-all: publish-release publish-dockerrepo ## Publishes the application to container repo and github releases
 
 publish-release: ## Not Yet Implemented: Publish to GitHub Releases
