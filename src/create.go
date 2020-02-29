@@ -7,7 +7,8 @@ import (
 func create(repository string, pipeline string, project string) {
 
 	//Testing
-	createDir(project)
+	var workingDir string = getCurrentDir()
+	createDir(workingDir + "/" + project)
 	// Load Plugins
 	repo, pipe := load(repository, pipeline)
 

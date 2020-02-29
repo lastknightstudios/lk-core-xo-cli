@@ -10,3 +10,12 @@ func createDir(dirName string) {
 	os.Mkdir(dirName, os.ModePerm)
 
 }
+
+func getCurrentDir() string {
+	path, err := os.Getwd()
+	if err != nil {
+		println(err)
+		os.Exit(1)
+	}
+	return path
+}
