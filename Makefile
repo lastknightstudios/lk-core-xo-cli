@@ -27,10 +27,11 @@ test: ## Not Yet Implemented: Runs go test
 
 build-all: app docker ## Build both the Go App and the Docker Image
 
-app: test ## Builds the Go App
+app: test ## Builds the Go App !!! not ideal
 	@echo "[BUILD] Building plugins to ./bin"
 	@go build -buildmode=plugin -o bin/buildkite.so src/plugins/buildkite.go
 	@go build -buildmode=plugin -o bin/github.so src/plugins/github.go
+		@go build -buildmode=plugin -o bin/buildkite2.so src/plugins/buildkite2.go
 	@echo "[BUILD] Building application to ./bin"
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go build -o bin/$(GONAME) $(GOFILES)
 

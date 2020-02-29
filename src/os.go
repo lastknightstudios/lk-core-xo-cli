@@ -8,7 +8,6 @@ import (
 func createDir(dirName string) {
 	fmt.Println("[OS] Creating directory", dirName)
 	os.Mkdir(dirName, os.ModePerm)
-
 }
 
 func getCurrentDir() string {

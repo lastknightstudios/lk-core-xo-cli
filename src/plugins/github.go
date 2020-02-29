@@ -34,10 +34,6 @@ func _CreateRepository(name string) {
 
 	// Init vars and consts
 
-	// First Check Env Variables and use these
-	repoOrg = os.Getenv("XO_REPO_ORG")
-	repoToken = os.Getenv("XO_REPO_TOKEN")
-
 	var RepoName = name
 	var RepoPrivate = true
 	var RepoHasIssues = false

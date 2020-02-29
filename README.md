@@ -1,6 +1,13 @@
-# lk-core-xo-cli
+# xo cli tool
 
-**DISCLAIMER**: Some of this readme maybe inaccurate or incomplete.
+**DISCLAIMER**: Some of this readme maybe inaccurate or incomplete. This statement will be removed when merged into master.
+
+A CLI Tool plugin framework for provisioning new development projects and resources. Supporting multiple organisations and accounts. Uses Personal Acccess Tokens for api access the tool enforces coding patterns and standards.
+The tool creates repositories, pipelines and webhooks and also allows an initial template commit with pipeline and starter code.
+
+## Motivation
+
+My main motivations in developing this tool is to learn the go programming language and is to prevent clickops of common tasks by providing a simple cli tool that enforces code structure and standards by means of good generic templates.
 
 ## Contents
 
@@ -9,19 +16,6 @@
 - Using the xo tool
 - Contributing & Creating Plugins
 - References
-
----
-
-### Description & Motivation
-
-#### Description
-
-A CLI Tool plugin framework for provisioning new development projects and resources. Supporting multiple organisations and accounts. Uses Personal Acccess Tokens for api access the tool enforces coding patterns and standards.
-The tool creates repositories, pipelines and webhooks and also allows an initial template commit with pipeline and starter code.
-
-#### Motivation
-
-My main motivations in developing this tool is to learn the go programming language and is to prevent clickops of common tasks by providing a simple cli tool that enforces code structure and standards by means of good generic templates.
 
 ---
 
