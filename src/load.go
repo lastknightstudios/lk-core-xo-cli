@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"plugin"
+	"strings"
 )
 
 // Repository Interface
@@ -19,70 +20,85 @@ type Pipeline interface {
 
 func load(repository string, pipeline string) (Repository, Pipeline) {
 	return loadRepositoryPlugin(repository, "Repository"), loadPipelinePlugin(pipeline, "Pipeline")
+
 }
 
 func loadRepositoryPlugin(repositoryPlugin string, pluginSymbol string) Repository {
-	fmt.Println("[PLUGINS] Loading:", repositoryPlugin, " plugin")
-
-	var mod string
-	mod = "./bin/" + repositoryPlugin + ".so"
-
-	plug, err := plugin.Open(mod)
-
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	symbol, err := plug.Lookup(pluginSymbol)
-
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
 
 	var repo Repository
-	repo, ok := symbol.(Repository)
+	sysPaths := strings.Split(envVarCheck("PATH"), ":")
 
-	if !ok {
-		fmt.Println("[ERROR] Unexpected repository type from plugin symbol")
-		os.Exit(1)
+	for index, sysPath := range sysPaths {
+
+		var mod string
+		mod = sysPath + "/" + repositoryPlugin + ".so"
+
+		plug, err := plugin.Open(mod)
+
+		if err != nil {
+			fmt.Println("[PLUGINS] Discovering install path, testing: ", index, sysPath)
+		} else {
+
+			symbol, err := plug.Lookup(pluginSymbol)
+
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+
+			repo, ok := symbol.(Repository)
+
+			if !ok {
+				fmt.Println("[ERROR] Unexpected repository type from plugin symbol")
+				os.Exit(1)
+			} else {
+				fmt.Println("[PLUGINS] Install discovered: ", sysPath)
+				fmt.Println("[PLUGINS] Plugin Loaded:", repositoryPlugin, repo)
+				return repo
+				break
+			}
+		}
+
 	}
-
-	fmt.Println("[PLUGINS] Plugin Loaded:", repositoryPlugin, repo)
-
 	return repo
 }
 
 func loadPipelinePlugin(pipelinePlugin string, pluginSymbol string) Pipeline {
-	fmt.Println("[PLUGINS] Loading:", pipelinePlugin, " plugin")
-
-	var mod string
-	mod = "./bin/" + pipelinePlugin + ".so"
-
-	plug, err := plugin.Open(mod)
-
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	symbol, err := plug.Lookup(pluginSymbol)
-
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
 
 	var pipe Pipeline
-	pipe, ok := symbol.(Pipeline)
+	sysPaths := strings.Split(envVarCheck("PATH"), ":")
 
-	if !ok {
-		fmt.Println("[ERROR] Unexpected pipeline type from plugin symbol")
-		os.Exit(1)
+	for index, sysPath := range sysPaths {
+
+		var mod string
+		mod = sysPath + "/" + pipelinePlugin + ".so"
+
+		plug, err := plugin.Open(mod)
+
+		if err != nil {
+			fmt.Println("[PLUGINS] Discovering install path, testing: ", index, sysPath)
+		} else {
+
+			symbol, err := plug.Lookup(pluginSymbol)
+
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+
+			pipe, ok := symbol.(Pipeline)
+
+			if !ok {
+				fmt.Println("[ERROR] Unexpected plugin type from plugin symbol")
+				os.Exit(1)
+			} else {
+				fmt.Println("[PLUGINS] Install discovered: ", sysPath)
+				fmt.Println("[PLUGINS] Plugin Loaded:", pipelinePlugin, pipe)
+				return pipe
+				break
+			}
+		}
+
 	}
-
-	fmt.Println("[PLUGINS] Plugin Loaded:", pipelinePlugin, pipe)
-
 	return pipe
 }

@@ -37,11 +37,6 @@ app: test ## Builds the Go App
 docker: ## Builds the Docker Image
 	@echo "[BUILD] Building Docker Image"
 	@docker build --no-cache --pull . -t $(DOCKERREPO)/$(APPNAME):latest
-
-install: ## Installs the App to /usr/local/bin
-	cp -rf ./bin/xo /usr/local/bin/
-	cp -rf ./bin/github.so /usr/local/bin/
-	cp -rf ./bin/buildkite.so /usr/local/bin/
 	
 publish-all: publish-release publish-dockerrepo ## Publishes the application to container repo and github releases
 
