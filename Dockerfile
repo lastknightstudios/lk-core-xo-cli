@@ -12,10 +12,13 @@ RUN adduser \
     --uid "${UID}" \
     "${USER}"
 
-FROM scratch
-COPY --from=builder /etc/passwd /etc/passwd
-COPY --from=builder /etc/group /etc/group
-WORKDIR /bin
 COPY ./bin .
-USER xouser:xouser
+WORKDIR ./bin
+#FROM scratch
+
+
+#COPY --from=builder /etc/passwd /etc/passwd
+#COPY --from=builder /etc/group /etc/group
+#USER xouser:xouser
+
 ENTRYPOINT [ "./xo" ]

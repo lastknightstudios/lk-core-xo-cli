@@ -8,8 +8,8 @@ import (
 func getEnvVars() {
 	Config["repoOrg"] = envVarCheck("XO_REPO_ORG")
 	Secrets["repoToken"] = envVarCheck("XO_REPO_TOKEN")
-	Config["pipelineOrg"] = envVarCheck("XO_PIPELINE_ORG")
-	Secrets["pipelineToken"] = envVarCheck("XO_PIPELINE_TOKEN")
+	Config["pipelineOrg"] = envVarCheck("XO_PIPE_ORG")
+	Secrets["pipelineToken"] = envVarCheck("XO_PIPE_TOKEN")
 	// TODO: Tokens should be validated before use
 }
 
