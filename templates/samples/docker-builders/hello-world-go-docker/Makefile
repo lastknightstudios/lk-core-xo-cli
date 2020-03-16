@@ -2,9 +2,9 @@
 
 CGO_ENABLED=0 
 GOOS=linux
-APPNAME=hello
+APPNAME=hello-go
 SHELL=/bin/bash
-DOCKERREPO=pkdcloud
+DOCKERREPO=lastknightstudios
 GOPATH=$(PWD)/vendor:$(PWD)/app
 GOBIN=$(PWD)/bin
 GOFILES=$(wildcard app/*.go)

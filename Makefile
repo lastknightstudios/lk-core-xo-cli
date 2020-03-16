@@ -5,6 +5,8 @@ SHELL=/bin/bash
 DOCKERREPO=lastknightstudios
 REPO=github
 PIPELINE=buildkite
+CGO_ENABLED=0 
+GOOS=linux
 GOPATH=$(PWD)/vendor:$(PWD)/src
 GOBIN=$(PWD)/bin
 GOFILES=$(wildcard src/*.go)
@@ -32,7 +34,7 @@ app: test ## Builds the Go App !!! not ideal
 	@go build -buildmode=plugin -o bin/buildkite.so src/plugins/buildkite.go
 	@go build -buildmode=plugin -o bin/github.so src/plugins/github.go
 	@echo "[BUILD] Building application to ./bin"
-	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go build -o bin/$(GONAME) $(GOFILES)
+	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) go build -a -installsuffix nocgo -o bin/$(GONAME) $(GOFILES)
 
 docker: ## Builds the Docker Image
 	@echo "[BUILD] Building Docker Image"
