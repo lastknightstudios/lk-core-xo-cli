@@ -36,7 +36,7 @@ func loadRepositoryPlugin(repositoryPlugin string, pluginSymbol string) Reposito
 		plug, err := plugin.Open(mod)
 
 		if err != nil {
-			fmt.Println("[PLUGINS] Discovering install path, testing: ", index, sysPath)
+			fmt.Println("[PLUGINS] Discovering Repository install path, testing: ", index, sysPath)
 		} else {
 
 			symbol, err := plug.Lookup(pluginSymbol)
@@ -76,7 +76,7 @@ func loadPipelinePlugin(pipelinePlugin string, pluginSymbol string) Pipeline {
 		plug, err := plugin.Open(mod)
 
 		if err != nil {
-			fmt.Println("[PLUGINS] Discovering install path, testing: ", index, sysPath)
+			fmt.Println("[PLUGINS] Discovering Pipeline install path, testing: ", index, sysPath)
 		} else {
 
 			symbol, err := plug.Lookup(pluginSymbol)

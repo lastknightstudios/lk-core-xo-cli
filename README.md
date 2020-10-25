@@ -178,11 +178,11 @@ var repoOrg = os.Getenv("XO_REPO_ORG")
 var repoToken = os.Getenv("XO_REPO_TOKEN")
 
 func (g repository) CreateRepository(name string) {
-	_CreateRepository(name)
+ _CreateRepository(name)
 }
 
 func (g repository) CreateWebhook(webhook string) {
-	_CreateWebhook(webhook)
+ _CreateWebhook(webhook)
 }
 
 // Repository exported as symbol
@@ -191,12 +191,12 @@ var Repository repository
 // Plugin Implementation
 
 func _CreateRepository(name string) {
-    // Your implementation
+ // Your implementation
 
 }
 
 func _CreateWebhook(webhook string) {
-    // Your implementation
+ // Your implementation
 }
 
 ```

@@ -46,7 +46,7 @@ publish-all: publish-release publish-dockerrepo ## Publishes the application to 
 publish-release: ## Not Yet Implemented: Publish to GitHub Releases
 	@echo "[PUBLISH] Publishing to GitHub Releases"
 
-publish-dockerrepo: ## Publish to dockerrepo
+publish-dockerrepo: ## Publish to dockerrepo * needs to check if updated
 	@echo "[PUBLISH] Publishing to dockerrepo"
 	@docker login docker.io -u $(DOCKERREPO)
 	@docker push $(DOCKERREPO)/$(APPNAME):latest
