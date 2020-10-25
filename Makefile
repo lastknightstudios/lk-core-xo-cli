@@ -56,4 +56,4 @@ clean:  ## Runs go clean
 	@echo "[CLEAN] Cleaning Up"
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go clean
 
-all: lint test build-all publish-all clean run ## Lint, Test and Build and Publish
+all: lint test build-all publish-all clean ## Lint, Test and Build and Publish
