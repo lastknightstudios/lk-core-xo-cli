@@ -1,4 +1,4 @@
-# xo cli tool - alpha * use at own risk ;)
+# xo cli tool - alpha * use at own risk
 
 **DISCLAIMER**: Some of this readme maybe inaccurate or incomplete. This statement will be removed when merged into master.
 
