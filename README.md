@@ -110,8 +110,19 @@ As the tool is provided by means of binaries or docker image the method of use i
 
 #### Binary Usage
 
-Ensure you are in the folder you want the new project to clone into.
-e.g. cd ~/scm/project_name
+If using the binaries ensure you have updated your path to point to the project bin folder.
+
+```bash
+export PATH=$(pwd)/bin:$PATH
+```
+
+or install the binary into your environment using your prefered method.
+
+Change to the folder you want the new project to clone into
+
+```bash
+cd ~/scm/github
+```
 
 To create a repository and pipeline
 

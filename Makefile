@@ -1,11 +1,11 @@
 # Makefile
 
 APPNAME=xo
-SHELL=/bin/bash
-DOCKERREPO=lastknightstudios
-REPO=github
-PIPELINE=buildkite
-CGO_ENABLED=0 
+SHELL := /bin/bash
+DOCKERREPO ?= lastknightstudios
+REPO ?= github
+PIPELINE ?= buildkite
+CGO_ENABLED=0
 GOOS=linux
 GOPATH=$(PWD)/vendor:$(PWD)/src
 GOBIN=$(PWD)/bin
@@ -13,6 +13,7 @@ GOFILES=$(wildcard src/*.go)
 GOPLUGINS="$(wildcard src/plugins/*.go)
 GONAME=$(APPNAME)
 PID=/tmp/go-$(GONAME).pid
+
 .DEFAULT_GOAL := help
 .PHONY: help test app docker publish-release publish-dockerrepo build-all publish-all clean
 
@@ -55,4 +56,4 @@ clean:  ## Runs go clean
 	@echo "[CLEAN] Cleaning Up"
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go clean
 
-all: lint test build-all publish-all clean ## Lint, Test and Build and Publish
+all: lint test build-all publish-all clean run ## Lint, Test and Build and Publish
