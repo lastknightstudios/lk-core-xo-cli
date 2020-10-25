@@ -223,7 +223,7 @@ var pipelineOrg = os.Getenv("XO_PIPELINE_ORG")
 var pipelineToken = os.Getenv("XO_PIPELINE_TOKEN")
 
 func (g pipeline) CreatePipeline(name string) {
-	_CreatePipeline(name)
+ _CreatePipeline(name)
 }
 
 // Pipeline exported as symbol
