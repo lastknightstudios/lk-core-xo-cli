@@ -19,8 +19,8 @@ func (g pipeline) CreatePipeline(name string) {
 
 // Pipeline exported as symbol
 var Pipeline pipeline
-var pipelineOrg = os.Getenv("XO_PIPE_ORG")
-var pipelineToken = os.Getenv("XO_PIPE_TOKEN")
+var pipelineOrg = os.Getenv("XO_PIPELINE_ORG")
+var pipelineToken = os.Getenv("XO_PIPELINE_TOKEN")
 var repoOrg = os.Getenv("XO_REPO_ORG")
 
 // Plugin Implementation

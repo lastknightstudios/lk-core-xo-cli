@@ -2,13 +2,6 @@
 
 **DISCLAIMER**: Some of this readme maybe inaccurate or incomplete. This statement will be removed when merged into master.
 
-A CLI Tool plugin framework for provisioning new development projects and resources. Supporting multiple organisations and accounts. Uses Personal Acccess Tokens for api access the tool enforces coding patterns and standards.
-The tool creates repositories, pipelines and webhooks and also allows an initial template commit with pipeline and starter code.
-
-## Motivation
-
-My main motivations in developing this tool is to learn the go programming language and is to prevent clickops of common tasks by providing a simple cli tool that enforces code structure and standards by means of good generic templates.
-
 ## Contents
 
 - Description & Motivation
@@ -19,18 +12,26 @@ My main motivations in developing this tool is to learn the go programming langu
 
 ---
 
-### Building the xo tool
+A CLI Tool plugin framework for provisioning new development projects and resources. Supporting multiple organisations and accounts. Uses SSH Tokens for api access the tool enforces coding patterns and standards by deploying an optional opinionated cookie cutter template based on selected project type on initial commit. These cookie cutters can be customised.
 
-You can either build binaries or create a docker container. Building the tool will create the go binaries and store in the ./bin folder or create a tiny docker image.
+The tool creates the repositories, pipeline and webhooks between the tools.
 
-#### Secrets
+## Motivation
 
-These secrets must be exported to the environment for the xo tool to be able to read them in. How you manage your secrets is out of scope of this document. I personally read them in from AWS Secrets Manager by calling a custom shell profile function when i need them.
+My main motivations in developing this tool is to learn the go programming language and is to prevent clickops of common tasks by providing a simple cli tool that enforces standard patterns by means of good generic cookie cutter templates.
+
+## Building the xo tool
+
+You can either build binaries or create a docker container. Building the tool will create the go binaries and store in the ./bin folder or create a small docker image < 25MB.
+
+### Secrets
+
+These secrets must be exported to the environment for the xo tool to be able to read them in. How you manage your secrets is out of scope of this README. I personally read them in from AWS Secrets Manager by calling a custom shell profile function when i need them. In a pipeline these are imported via AWS CLI and exported to environment then cleared after use.
 
 - The XO_REPO_ORG is the github stub name for  your targeted org or username
-- The XO_REPO_TOKEN is your personal access token.
+- The XO_REPO_TOKEN is an ssh key that has access to create and commit to repos. *
 - The XO_PIPELINE_ORG is the ci/cd stub name for your targeted org or username
-- The XO_PIPELINE_TOKEN is your api key or access token.
+- The XO_PIPELINE_TOKEN is your api key or access token that has access to create and execute pipelines. *
 
 ```bash
 export XO_REPO_ORG=lastknightstudios
