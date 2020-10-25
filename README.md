@@ -35,8 +35,8 @@ These secrets must be exported to the environment for the xo tool to be able to 
 ```bash
 export XO_REPO_ORG=lastknightstudios
 export XO_REPO_TOKEN=abcds123123123123123
-export XO_PIPELINE_ORG=lastknightstudios
-export XO_PIPELINE_TOKEN=abcds123123123123123
+export XO_PIPE_ORG=lastknightstudios
+export XO_PIPE_TOKEN=abcds123123123123123
 ```
 
 #### Tool Requirements
